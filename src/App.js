@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Container } from "react-bootstrap";
+import "./App.css";
+import restaurant_jpg from "./assets/restaurant.jpg";
+import background from "./assets/background.jpg";
+import BookTableForm from "./components/booktableform";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    console.log(background);
+    return (
+        <>
+            <div
+                className="cardImage"
+                style={{ backgroundImage: `url(${restaurant_jpg})` }}
+            >
+                <Container
+                    className="customText"
+                    style={{ paddingTop: "20vh" }}
+                >
+                    <h3 className="customText">XYZ Restaurant</h3>
+                    <h5>Idhar Khaana Milta, Aur</h5>
+                    <h5>Tumko Kya chahiye?</h5>
+                </Container>
+            </div>
+            <div
+                className="cardImage"
+                style={{ backgroundImage: `url:(${background})` }}
+            >
+                <h3 style={{ textAlign: "center", paddingTop: "20vh" }}>
+                    Book A Table
+                </h3>
+                <Container className="d-flex justify-content-center align-items-center">
+                    <BookTableForm />
+                </Container>
+            </div>
+        </>
+    );
 }
 
 export default App;
