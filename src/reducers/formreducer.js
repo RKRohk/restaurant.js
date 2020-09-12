@@ -1,18 +1,33 @@
 const { createAction, createReducer } = require("@reduxjs/toolkit");
 
-const submitDetails = createAction('form/submitdetails',text => ({payload:{
-    text,
-    createdAt: new Date().toISOString()
-}}))
+const submitDetails = createAction("form/submitdetails", (text) => ({
+    payload: {
+        text,
+        createdAt: new Date().toISOString(),
+    },
+}));
 
-
-const formReducer = createReducer({},{
-    [submitDetails]:(state,action) => {
-        state.formdata = action.payload
-        state.visible = "SELECT_TABLE"
+const submitTable = createAction("form/submittable",text => ({
+    payload:{
+        text,
+        createdAt: new Date().toISOString()
     }
-})
+}))
 
-export {submitDetails}
+const formReducer = createReducer(
+    {},
+    {
+        [submitDetails]: (state, action) => {
+            state.formdata = action.payload;
+            state.visible = "SELECT_TABLE";
+        },
+        [submitTable]:(state,action) => {
+            state.selectedTable = action.payload;
+            state.visible = "SUBMIT";
+        }
+    }
+);
 
-export default formReducer
+export { submitDetails,submitTable };
+
+export default formReducer;

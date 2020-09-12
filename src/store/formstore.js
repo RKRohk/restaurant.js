@@ -7,6 +7,7 @@ const middleware = [...getDefaultMiddleware(),logger]
 
 const preloadedState = {
     formdata:{},
+    selectedTable:undefined,
     visible:"FORM_SCREEN"
 }
 

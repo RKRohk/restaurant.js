@@ -1,9 +1,7 @@
 import {useFormik } from "formik";
 import React from "react";
-import {connect,useDispatch} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import { Button, Col, Form } from "react-bootstrap";
-
-import store from '../store/formstore'
 
 import {submitDetails} from '../reducers/formreducer'
 

@@ -3,7 +3,7 @@ import { Container } from "react-bootstrap";
 import "./App.css";
 import restaurant_jpg from "./assets/restaurant.jpg";
 import background from "./assets/background.jpg";
-import BookTableForm from "./components/booktableform";
+import BookTable from './components/BookTable'
 import { Provider } from "react-redux";
 import store from './store/formstore'
 
@@ -26,7 +26,7 @@ function App() {
             </div>
             <Container as="div" style={{backgroundImage:`url(${background})`,height:"100vh"}} fluid>
                 <Provider store={store}>
-                    <BookTableForm />
+                    <BookTable />
                 </Provider>
             </Container>
         </>
