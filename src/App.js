@@ -4,6 +4,8 @@ import "./App.css";
 import restaurant_jpg from "./assets/restaurant.jpg";
 import background from "./assets/background.jpg";
 import BookTableForm from "./components/booktableform";
+import { Provider } from "react-redux";
+import store from './store/formstore'
 
 function App() {
     console.log(background);
@@ -22,17 +24,11 @@ function App() {
                     <h5>Tumko Kya chahiye?</h5>
                 </Container>
             </div>
-            <div
-                className="cardImage"
-                style={{ backgroundImage: `url:(${background})` }}
-            >
-                <h3 style={{ textAlign: "center", paddingTop: "20vh" }}>
-                    Book A Table
-                </h3>
-                <Container className="d-flex justify-content-center align-items-center">
+            <Container as="div" style={{backgroundImage:`url(${background})`,height:"100vh"}} fluid>
+                <Provider store={store}>
                     <BookTableForm />
-                </Container>
-            </div>
+                </Provider>
+            </Container>
         </>
     );
 }

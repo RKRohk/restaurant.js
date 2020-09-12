@@ -1,10 +1,18 @@
-import { useFormik } from "formik";
+import {useFormik } from "formik";
 import React from "react";
+import {connect,useDispatch} from 'react-redux'
 import { Button, Col, Form } from "react-bootstrap";
+
+import store from '../store/formstore'
+
+import {submitDetails} from '../reducers/formreducer'
 
 import './booktable.css'
 
+
 const BookTableForm = () => {
+    const dispatch = useDispatch()
+
     const formik = useFormik({
         initialValues: {
             firstName: "",
@@ -18,6 +26,7 @@ const BookTableForm = () => {
         onSubmit: (values) => {
             console.log(values);
             alert(JSON.stringify(values));
+            dispatch(submitDetails(values))
         },
     });
 
@@ -95,4 +104,4 @@ const BookTableForm = () => {
     );
 };
 
-export default BookTableForm;
+export default BookTableForm
