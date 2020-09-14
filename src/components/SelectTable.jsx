@@ -1,46 +1,74 @@
-import {useFormik } from 'formik'
-import React from 'react'
-import { Button, Form } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
-import './booktable.css'
-import {submitTable} from '../reducers/formreducer'
+import { useFormik } from "formik";
+import React, { useEffect } from "react";
+import { Button, Form, Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import "./booktable.css";
+import { fetchTables, selectTable } from "../reducers/TableReducer";
 
-const tables = [
-    {tablenumber:1,capacity:5},
-    {tablenumber:2,capacity:6},
-    {tablenumber:3,capacity:4},
-    {tablenumber:4,capacity:2},
-    {tablenumber:5,capacity:5},
-    {tablenumber:6,capacity:6},
-    {tablenumber:7,capacity:1}
-]
+const initTables = [
+    { tablenumber: 1, capacity: 5 },
+    { tablenumber: 2, capacity: 6 },
+    { tablenumber: 3, capacity: 4 },
+    { tablenumber: 4, capacity: 2 },
+    { tablenumber: 5, capacity: 5 },
+    { tablenumber: 6, capacity: 6 },
+    { tablenumber: 7, capacity: 1 },
+];
 const SelectTable = () => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const occupied = useSelector((state) => state.tables.occupied);
+    const loading = useSelector((state) => state.tables.loading);
+    const tables = initTables.filter(
+        (table) => !occupied.includes(table.tablenumber)
+    );
     const formik = useFormik({
-        initialValues:{
-            tablenumber:undefined,
-            capacity:0
+        initialValues: {
+            tablenumber: undefined,
+            capacity: 0,
         },
-        onSelect: values => {
-            console.log(values)
+        onSelect: (values) => {
+            console.log(values);
         },
-        onSubmit: values => {
-            console.log(values)
-            alert(values)
-            dispatch(submitTable(values.tablenumber))
-        }
-    })
+        onSubmit: (values) => {
+            console.log(values);
+            alert(values);
+            dispatch(selectTable(values.tablenumber));
+        },
+    });
 
-    
-    return <div className="formbg">
-        <Form onSubmit={formik.handleSubmit}>
-            <Form.Label>Select Your Table</Form.Label>
-            {tables.map( table => <Form.Check sm={2} md={4} type="radio" name="tablenumber" value={formik.tablenumber} onChange={() => formik.setFieldValue("tablenumber",table.tablenumber)} key={table.tablenumber} label={table.capacity}></Form.Check>)}
-            <Button type="submit">Next</Button>
-        </Form>
-    </div>
+    useEffect(() => {
+        dispatch(fetchTables());
+    }, [dispatch]);
 
+    return (
+        <div className="formbg">
+            {loading ? (
+                <Spinner animation="grow" variant="info" />
+            ) : (
+                <Form onSubmit={formik.handleSubmit}>
+                    <Form.Label>Select Your Table</Form.Label>
+                    {tables.map((table) => (
+                        <Form.Check
+                            sm={2}
+                            md={4}
+                            type="radio"
+                            name="tablenumber"
+                            value={formik.tablenumber}
+                            onChange={() =>
+                                formik.setFieldValue(
+                                    "tablenumber",
+                                    table.tablenumber
+                                )
+                            }
+                            key={table.tablenumber}
+                            label={table.tablenumber}
+                        ></Form.Check>
+                    ))}
+                    <Button type="submit">Next</Button>
+                </Form>
+            )}
+        </div>
+    );
+};
 
-}
-
-export default SelectTable
+export default SelectTable;
