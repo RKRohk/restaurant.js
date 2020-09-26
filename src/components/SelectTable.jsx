@@ -4,6 +4,7 @@ import { Button, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import "./booktable.css";
 import { fetchTables, selectTable } from "../reducers/TableReducer";
+import { submitTable } from "../actions/FormActions";
 
 const initTables = [
     { tablenumber: 1, capacity: 5 },
@@ -32,7 +33,11 @@ const SelectTable = () => {
         onSubmit: (values) => {
             console.log(values);
             alert(values);
+            //Select the table
             dispatch(selectTable(values.tablenumber));
+            
+            //Move to the next page
+            dispatch(submitTable())
         },
     });
 

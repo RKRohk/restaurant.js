@@ -3,7 +3,7 @@ import React from "react";
 import {useDispatch} from 'react-redux'
 import { Button, Col, Form } from "react-bootstrap";
 
-import {submitDetails} from '../reducers/FormReducer'
+import {submitDetails} from '../reducers/formreducer'
 
 import './booktable.css'
 

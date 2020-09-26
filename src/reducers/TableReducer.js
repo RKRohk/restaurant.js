@@ -13,7 +13,7 @@ const tableSlice = createSlice({
     initialState:{occupied:[],selected:'',loading:true},
     reducers:{
         selectTable(state,action){
-            return state.selected = action.payload
+            state.selected = action.payload
         },
     },
     extraReducers:{
