@@ -8,7 +8,7 @@ import tableReducer from '../reducers/TableReducer'
 const middleware = [...getDefaultMiddleware(),logger]
 
 const preloadedState = {
-    formdata:{},
+    formdata:undefined,
     visible:"FORM_SCREEN"
 }
 

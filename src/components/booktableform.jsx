@@ -32,8 +32,6 @@ const BookTableForm = () => {
 
     const t = `${today.getDate()}-${today.getMonth()}-${today.getFullYear()}`
 
-    console.log(t)
-
     
     return (
         <Form className="formbg" onSubmit={formik.handleSubmit}>

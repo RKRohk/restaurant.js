@@ -17,10 +17,12 @@ const initTables = [
 ];
 const SelectTable = () => {
     const dispatch = useDispatch();
-    const occupied = useSelector((state) => state.tables.occupied);
+    const occupied = useSelector((state) => state.tables.occupied) || [];
     const loading = useSelector((state) => state.tables.loading);
+    const date = useSelector((state) => state.formdata.text.date);
+    const time = useSelector(state => state.formdata.text.time);
     const tables = initTables.filter(
-        (table) => !occupied.includes(table.tablenumber)
+        (table) => !occupied.find( item => item.tablenumber == table.tablenumber)
     );
     const formik = useFormik({
         initialValues: {
@@ -42,7 +44,7 @@ const SelectTable = () => {
     });
 
     useEffect(() => {
-        dispatch(fetchTables());
+        dispatch(fetchTables({date,time}));
     }, [dispatch]);
 
     return (
