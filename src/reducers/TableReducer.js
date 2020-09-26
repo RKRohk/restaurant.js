@@ -4,7 +4,7 @@ export const fetchTables = createAsyncThunk(
     'tables/get',
     async () => {
         await new Promise( resolve => setTimeout(resolve,1000))
-        return [3]
+        return [6]
     }
 )
 
@@ -12,9 +12,17 @@ const tableSlice = createSlice({
     name:'selectedTable',
     initialState:{occupied:[],selected:'',loading:true},
     reducers:{
-        selectTable(state,action){
-            state.selected = action.payload
-        },
+        // selectTable(state,action){
+        //     state.selected = action.payload
+        // },
+        selectTable:{
+            reducer(state,action) {
+                state.selected = action.payload.text
+            },
+            prepare(text){
+                return {payload:{text,createdAt:new Date().toISOString()}}
+            }
+        }
     },
     extraReducers:{
         [fetchTables.fulfilled]:(state,action) => {

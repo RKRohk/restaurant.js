@@ -1,7 +1,7 @@
 import {configureStore, getDefaultMiddleware} from '@reduxjs/toolkit'
 import logger from 'redux-logger'
 
-import formReducer from '../reducers/formreducer'
+import formReducer from '../reducers/formReducer'
 import fragmentReducer from '../reducers/FragmentReducer'
 import tableReducer from '../reducers/TableReducer'
 
