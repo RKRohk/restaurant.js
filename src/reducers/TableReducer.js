@@ -3,54 +3,87 @@ import { projectFirestore } from "../config/firebaseConfig";
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
 export const fetchTables = createAsyncThunk(
-    'tables/get',
+    "tables/get",
     async (arg, thunkAPI) => {
-        const date = arg.date
-        const time = arg.time.substr(0,2).trim()
-        console.log("trying")
-        try{
-            console.log(time)
-            const dateMap = await projectFirestore.collection('tables').doc(date).get()
-            // await new Promise( resolve => setTimeout(resolve,1000))
-            console.log(dateMap.data().booked[time])
-            const data = dateMap.data()
-            return data.booked[time.toString()]
+        const date = arg.date;
+        const time = arg.time.substr(0, 2).trim();
+        try {
+            const dateMap = await projectFirestore.collection("tables").doc(date).get();
+            console.log(dateMap.data().booked[time]);
+            const data = dateMap.data();
+            return data.booked[time.toString()];
+        } catch (e) {
+            console.error(e.toString());
+            return [];
         }
-        catch (e) {
-            console.error(e.toString())
-            return []
+    }
+);
+
+export const bookTable = createAsyncThunk(
+    "bookTable",
+    async (arg, ThunkAPI) => {
+        const date = arg.date;
+        let time = arg.time.substr(0, 2).trim();
+        const table = arg.table;
+        const occupied = arg.occupied || []
+        const payload = {booked:{
+                "12":[],
+                "1":[],
+                "2":[],
+                "3":[],
+                "4":[],
+                "5":[]
+            }};
+        console.log(payload)
+        try {
+            console.log("Requesting")
+            console.log(payload)
+            if(!occupied.length){
+                payload.booked[time] = [table];
+                await projectFirestore.collection("tables").doc(date).set(payload, { merge: true });
+            }
+            else{
+                console.log("Updating",occupied)
+                occupied.push(table)
+                payload.booked[time] = occupied
+                console.log(payload)
+                await projectFirestore.collection("tables").doc(date).update(payload);
+            }
+        } catch (e) {
+            console.error(e);
+            throw(Error("Book Table Error"));
         }
-    },
-)
+    }
+);
 
 const tableSlice = createSlice({
-    name:'selectedTable',
-    initialState:{occupied:[],selected:'',loading:true},
-    reducers:{
-        // selectTable(state,action){
-        //     state.selected = action.payload
-        // },
-        selectTable:{
-            reducer(state,action) {
-                state.selected = action.payload.text
+    name: "selectedTable",
+    initialState: { occupied: [], selected: "", loading: true },
+    reducers: {
+        selectTable: {
+            reducer(state, action) {
+                state.selected = action.payload.text;
             },
-            prepare(text){
-                return {payload:{text,createdAt:new Date().toISOString()}}
+            prepare(text) {
+                return { payload: { text, createdAt: new Date().toISOString() } };
             }
         }
     },
-    extraReducers:{
-        [fetchTables.fulfilled]:(state,action) => {
-            return {...state,occupied:action.payload,loading:false}
+    extraReducers: {
+        [fetchTables.fulfilled]: (state, action) => {
+            return { ...state, occupied: action.payload, loading: false };
         },
-        [fetchTables.rejected]:(state,action) => {
-            return {...state,occupied:[],loading:false}
+        [fetchTables.rejected]: (state, action) => {
+            return { ...state, occupied: [], loading: false };
+        },
+        [bookTable.fulfilled]: (state,action) => {
+            return state;
         }
     }
-})
+});
 
-const {actions,reducer} = tableSlice
+const { actions, reducer } = tableSlice;
 
-export const {selectTable} = actions
+export const { selectTable } = actions;
 
-export default reducer
+export default reducer;

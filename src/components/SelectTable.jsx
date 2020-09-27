@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { Button, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import "./booktable.css";
-import { fetchTables, selectTable } from "../reducers/TableReducer";
+import { bookTable, fetchTables, selectTable } from "../reducers/TableReducer";
 import { submitTable } from "../actions/FormActions";
 
 const initTables = [
@@ -13,7 +13,7 @@ const initTables = [
     { tablenumber: 4, capacity: 2 },
     { tablenumber: 5, capacity: 5 },
     { tablenumber: 6, capacity: 6 },
-    { tablenumber: 7, capacity: 1 },
+    { tablenumber: 7, capacity: 1 }
 ];
 const SelectTable = () => {
     const dispatch = useDispatch();
@@ -22,12 +22,12 @@ const SelectTable = () => {
     const date = useSelector((state) => state.formdata.text.date);
     const time = useSelector(state => state.formdata.text.time);
     const tables = initTables.filter(
-        (table) => !occupied.find( item => item.tablenumber == table.tablenumber)
+        (table) => !occupied.find(item => item.tablenumber == table.tablenumber)
     );
     const formik = useFormik({
         initialValues: {
             tablenumber: undefined,
-            capacity: 0,
+            capacity: 0
         },
         onSelect: (values) => {
             console.log(values);
@@ -36,15 +36,16 @@ const SelectTable = () => {
             console.log(values);
             alert(values);
             //Select the table
-            dispatch(selectTable(values.tablenumber));
-            
+            dispatch(selectTable(values));
+
             //Move to the next page
-            dispatch(submitTable())
-        },
+            dispatch(bookTable({date,time,table:values,occupied:[...occupied]}))
+            dispatch(submitTable());
+        }
     });
 
     useEffect(() => {
-        dispatch(fetchTables({date,time}));
+        dispatch(fetchTables({ date, time }));
     }, [dispatch]);
 
     return (
@@ -69,7 +70,7 @@ const SelectTable = () => {
                             }
                             key={table.tablenumber}
                             label={table.tablenumber}
-                        ></Form.Check>
+                        />
                     ))}
                     <Button type="submit">Next</Button>
                 </Form>
