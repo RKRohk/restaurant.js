@@ -26,6 +26,9 @@ export const bookTable = createAsyncThunk(
         let time = arg.time.substr(0, 2).trim();
         const table = arg.table;
         const occupied = arg.occupied || []
+
+        //This is how the structure should look on firebase.
+        //The keys here are the times
         const payload = {booked:{
                 "12":[],
                 "1":[],
@@ -38,15 +41,17 @@ export const bookTable = createAsyncThunk(
         try {
             console.log("Requesting")
             console.log(payload)
+            //Checks if there are no reservations. If there are no reservations then we create new document
             if(!occupied.length){
                 payload.booked[time] = [table];
                 await projectFirestore.collection("tables").doc(date).set(payload, { merge: true });
             }
+            //Else we update existing document
             else{
-                console.log("Updating",occupied)
+                //We add new table to list of occupied tables
                 occupied.push(table)
                 payload.booked[time] = occupied
-                console.log(payload)
+                //And we push
                 await projectFirestore.collection("tables").doc(date).update(payload);
             }
         } catch (e) {
@@ -76,8 +81,11 @@ const tableSlice = createSlice({
         [fetchTables.rejected]: (state, action) => {
             return { ...state, occupied: [], loading: false };
         },
+        [bookTable.pending]:(state,action) => {
+            state.loading = true;
+        },
         [bookTable.fulfilled]: (state,action) => {
-            return state;
+            state.loading = false;
         }
     }
 });
